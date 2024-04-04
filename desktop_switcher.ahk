@@ -146,14 +146,28 @@ switchDesktopToRight()
 {
     global CurrentDesktop, DesktopCount
     updateGlobalVariables()
-    _switchDesktopToTarget(CurrentDesktop == DesktopCount ? 1 : CurrentDesktop + 1)
+    _switchDesktopToTarget(CurrentDesktop == 3 || CurrentDesktop == 6 || CurrentDesktop == 9 ? CurrentDesktop : CurrentDesktop + 1)
 }
 
 switchDesktopToLeft()
 {
     global CurrentDesktop, DesktopCount
     updateGlobalVariables()
-    _switchDesktopToTarget(CurrentDesktop == 1 ? DesktopCount : CurrentDesktop - 1)
+    _switchDesktopToTarget(CurrentDesktop == 1 || CurrentDesktop == 4 || CurrentDesktop == 7 ? CurrentDesktop : CurrentDesktop - 1)
+}
+
+switchDesktopToUp()
+{
+    global CurrentDesktop, DesktopCount
+    updateGlobalVariables()
+    _switchDesktopToTarget(CurrentDesktop <= 3 ? CurrentDesktop : CurrentDesktop - 3)
+}
+
+switchDesktopToDown()
+{
+    global CurrentDesktop, DesktopCount
+    updateGlobalVariables()
+    _switchDesktopToTarget(CurrentDesktop >= 7 ? CurrentDesktop : CurrentDesktop + 3)
 }
 
 focusTheForemostWindow(targetDesktop) {
@@ -190,13 +204,31 @@ MoveCurrentWindowToDesktop(desktopNumber) {
     switchDesktopByNumber(desktopNumber)
 }
 
+MoveCurrentWindowToUpDesktop()
+{
+    global CurrentDesktop, DesktopCount
+    updateGlobalVariables()
+    WinGet, activeHwnd, ID, A
+    DllCall(MoveWindowToDesktopNumberProc, UInt, activeHwnd, UInt, (CurrentDesktop <= 3 ? CurrentDesktop : CurrentDesktop - 3) - 1)
+    _switchDesktopToTarget(CurrentDesktop <= 3 ? CurrentDesktop : CurrentDesktop - 3)
+}
+
+MoveCurrentWindowToDownDesktop()
+{
+    global CurrentDesktop, DesktopCount
+    updateGlobalVariables()
+    WinGet, activeHwnd, ID, A
+    DllCall(MoveWindowToDesktopNumberProc, UInt, activeHwnd, UInt, (CurrentDesktop >= 7 ? CurrentDesktop : CurrentDesktop + 3) - 1)
+    _switchDesktopToTarget(CurrentDesktop >= 7 ? CurrentDesktop : CurrentDesktop + 3)
+}
+
 MoveCurrentWindowToRightDesktop()
 {
     global CurrentDesktop, DesktopCount
     updateGlobalVariables()
     WinGet, activeHwnd, ID, A
-    DllCall(MoveWindowToDesktopNumberProc, UInt, activeHwnd, UInt, (CurrentDesktop == DesktopCount ? 1 : CurrentDesktop + 1) - 1)
-    _switchDesktopToTarget(CurrentDesktop == DesktopCount ? 1 : CurrentDesktop + 1)
+    DllCall(MoveWindowToDesktopNumberProc, UInt, activeHwnd, UInt, (CurrentDesktop == 3 || CurrentDesktop == 6 || CurrentDesktop == 9 ? CurrentDesktop : CurrentDesktop + 1) - 1)
+    _switchDesktopToTarget(CurrentDesktop == 3 || CurrentDesktop == 6 || CurrentDesktop == 9 ? CurrentDesktop : CurrentDesktop + 1)
 }
 
 MoveCurrentWindowToLeftDesktop()
@@ -204,9 +236,10 @@ MoveCurrentWindowToLeftDesktop()
     global CurrentDesktop, DesktopCount
     updateGlobalVariables()
     WinGet, activeHwnd, ID, A
-    DllCall(MoveWindowToDesktopNumberProc, UInt, activeHwnd, UInt, (CurrentDesktop == 1 ? DesktopCount : CurrentDesktop - 1) - 1)
-    _switchDesktopToTarget(CurrentDesktop == 1 ? DesktopCount : CurrentDesktop - 1)
+    DllCall(MoveWindowToDesktopNumberProc, UInt, activeHwnd, UInt, (CurrentDesktop == 1 || CurrentDesktop == 4 || CurrentDesktop == 7 ? CurrentDesktop : CurrentDesktop - 1) - 1)
+    _switchDesktopToTarget(CurrentDesktop == 1 || CurrentDesktop == 4 || CurrentDesktop == 7 ? CurrentDesktop : CurrentDesktop - 1)
 }
+
 
 ;
 ; This function creates a new virtual desktop and switches to it
@@ -233,4 +266,116 @@ deleteVirtualDesktop()
     DesktopCount--
     CurrentDesktop--
     OutputDebug, [delete] desktops: %DesktopCount% current: %CurrentDesktop%
+}
+
+global IsPinnedWindowProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "IsPinnedWindow", "Ptr")
+global PinWindowProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "PinWindow", "Ptr")
+global UnPinWindowProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "UnPinWindow", "Ptr")
+global IsPinnedAppProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "IsPinnedApp", "Ptr")
+global PinAppProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "PinApp", "Ptr")
+global UnPinAppProc := DllCall("GetProcAddress", Ptr, hVirtualDesktopAccessor, AStr, "UnPinApp", "Ptr")
+
+_GetCurrentWindowID() {
+    WinGet, activeHwnd, ID, A
+    return activeHwnd
+}
+
+_GetCurrentWindowTitle() {
+    WinGetTitle, activeHwnd, A
+    return activeHwnd
+}
+
+OnTogglePinOnTopPress() {
+        _notif(_TruncateString(_GetCurrentWindowTitle(), 100), "Toggled 'Pin On Top'")
+	Winset, Alwaysontop, , A
+}
+
+OnTogglePinWindowPress() {
+    windowID := _GetCurrentWindowID()
+    windowTitle := _GetCurrentWindowTitle()
+    if (_GetIsWindowPinned(windowID)) {
+        _UnpinWindow(windowID)
+        _ShowTooltipForUnpinnedWindow(windowTitle)
+    }
+    else {
+        _PinWindow(windowID)
+        _ShowTooltipForPinnedWindow(windowTitle)
+    }
+}
+
+OnTogglePinAppPress() {
+    windowID := _GetCurrentWindowID()
+    windowTitle := _GetCurrentWindowTitle()
+    if (_GetIsAppPinned(windowID)) {
+        _UnpinApp(windowID)
+        _ShowTooltipForUnpinnedApp(windowTitle)
+    }
+    else {
+        _PinApp(windowID)
+        _ShowTooltipForPinnedApp(windowTitle)
+    }
+}
+
+_PinWindow(windowID:="") {
+    _CallWindowProc(PinWindowProc, windowID)
+}
+
+_UnpinWindow(windowID:="") {
+    _CallWindowProc(UnpinWindowProc, windowID)
+}
+
+_GetIsWindowPinned(windowID:="") {
+    return _CallWindowProc(IsPinnedWindowProc, windowID)
+}
+
+_PinApp(windowID:="") {
+    _CallWindowProc(PinAppProc, windowID)
+}
+
+_UnpinApp(windowID:="") {
+    _CallWindowProc(UnpinAppProc, windowID)
+}
+
+_GetIsAppPinned(windowID:="") {
+    return _CallWindowProc(IsPinnedAppProc, windowID)
+}
+
+_CallWindowProc(proc, window:="") {
+    if (window == "") {
+        window := _GetCurrentWindowID()
+    }
+    return DllCall(proc, UInt, window)
+}
+
+_notif(txt, title:="") {
+    HideTrayTip()
+    TrayTip, %title%, %txt%, 1
+}
+
+HideTrayTip() {
+    TrayTip  ; Attempt to hide it the normal way.
+    if SubStr(A_OSVersion,1,3) = "10." {
+        Menu Tray, NoIcon
+        Sleep 200  ; It may be necessary to adjust this sleep.
+        Menu Tray, Icon
+    }
+}
+_ShowTooltipForPinnedWindow(windowTitle) {
+    _notif(_TruncateString(windowTitle, 100), "Pinned Window")
+}
+
+_ShowTooltipForUnpinnedWindow(windowTitle) {
+    _notif(_TruncateString(windowTitle, 100), "Unpinned Window")
+}
+
+_ShowTooltipForPinnedApp(windowTitle) {
+    _notif(_TruncateString(windowTitle, 100), "Pinned App")
+}
+
+_ShowTooltipForUnpinnedApp(windowTitle) {
+    _notif(_TruncateString(windowTitle, 100), "Unpinned App")
+}
+
+_TruncateString(string:="", n:=10) {
+    return (StrLen(string) > n ? SubStr(string, 1, n-3) . "..." : string)
 }

@@ -17,66 +17,104 @@
 ; #!space::switchDesktopToRight()        <- <Win> + <Alt> + <Space> will switch to next desktop
 ; CapsLock & n::switchDesktopToRight()   <- <CapsLock> + <N> will switch to the next desktop (& is necessary when using non-modifier key such as CapsLock)
 
+; === INSTRUCTIONS ===
+; Below is the alternate key configuration. Delete symbol ; in the beginning of the line to enable.
+; Note, that  ^!1  means "Ctrl + Alt + 1" and  ^#1  means "Ctrl + Win + 1"
+; === END OF INSTRUCTIONS ===
+
 ; ===========================
 ; === END OF INSTRUCTIONS ===
 ; ===========================
 
-CapsLock & 1::switchDesktopByNumber(1)
-CapsLock & 2::switchDesktopByNumber(2)
-CapsLock & 3::switchDesktopByNumber(3)
-CapsLock & 4::switchDesktopByNumber(4)
-CapsLock & 5::switchDesktopByNumber(5)
-CapsLock & 6::switchDesktopByNumber(6)
-CapsLock & 7::switchDesktopByNumber(7)
-CapsLock & 8::switchDesktopByNumber(8)
-CapsLock & 9::switchDesktopByNumber(9)
+; ====================
+; === MATTIS EGNA BINDINGS ===
+; ====================
 
-CapsLock & Numpad1::switchDesktopByNumber(1)
-CapsLock & Numpad2::switchDesktopByNumber(2)
-CapsLock & Numpad3::switchDesktopByNumber(3)
-CapsLock & Numpad4::switchDesktopByNumber(4)
-CapsLock & Numpad5::switchDesktopByNumber(5)
-CapsLock & Numpad6::switchDesktopByNumber(6)
-CapsLock & Numpad7::switchDesktopByNumber(7)
-CapsLock & Numpad8::switchDesktopByNumber(8)
-CapsLock & Numpad9::switchDesktopByNumber(9)
+; This requires the following desktops:
+; Up: 1, Left: 2, Right: 3, Down: 4
 
-CapsLock & n::switchDesktopToRight()
-CapsLock & p::switchDesktopToLeft()
-CapsLock & s::switchDesktopToRight()
-CapsLock & a::switchDesktopToLeft()
-CapsLock & tab::switchDesktopToLastOpened()
 
-CapsLock & c::createVirtualDesktop()
-CapsLock & d::deleteVirtualDesktop()
+^!w::switchDesktopByNumber(1)
+^!a::switchDesktopByNumber(2)
+^!d::switchDesktopByNumber(3)
+^!s::switchDesktopByNumber(4)
 
-CapsLock & q::MoveCurrentWindowToDesktop(1)
-CapsLock & w::MoveCurrentWindowToDesktop(2)
-CapsLock & e::MoveCurrentWindowToDesktop(3)
-CapsLock & r::MoveCurrentWindowToDesktop(4)
-CapsLock & t::MoveCurrentWindowToDesktop(5)
-CapsLock & y::MoveCurrentWindowToDesktop(6)
-CapsLock & u::MoveCurrentWindowToDesktop(7)
-CapsLock & i::MoveCurrentWindowToDesktop(8)
-CapsLock & o::MoveCurrentWindowToDesktop(9)
+^!+w::MoveCurrentWindowToDesktop(1)
+^!+a::MoveCurrentWindowToDesktop(2)
+^!+d::MoveCurrentWindowToDesktop(3)
+^!+s::MoveCurrentWindowToDesktop(4)
 
-CapsLock & Right::MoveCurrentWindowToRightDesktop()
-CapsLock & Left::MoveCurrentWindowToLeftDesktop()
+^!tab::switchDesktopToLastOpened()
+
+^!Up::switchDesktopByNumber(1)
+^!Left::switchDesktopByNumber(2)
+^!Right::switchDesktopByNumber(3)
+^!Down::switchDesktopByNumber(4)
+
+^!+Up::MoveCurrentWindowToDesktop(1)
+^!+Left::MoveCurrentWindowToDesktop(2)
+^!+Right::MoveCurrentWindowToDesktop(3)
+^!+Down::MoveCurrentWindowToDesktop(4)
+
+; ^!+g::OnTogglePinOnTopPress()
+^!+o::OnTogglePinAppPress()
+^!+p::OnTogglePinWindowPress()
+
+; ===========================
+; === END OF MATTIS ===
+; ===========================
+
+; CapsLock & 1::switchDesktopByNumber(1)
+; CapsLock & 2::switchDesktopByNumber(2)
+; CapsLock & 3::switchDesktopByNumber(3)
+; CapsLock & 4::switchDesktopByNumber(4)
+; CapsLock & 5::switchDesktopByNumber(5)
+; CapsLock & 6::switchDesktopByNumber(6)
+; CapsLock & 7::switchDesktopByNumber(7)
+; CapsLock & 8::switchDesktopByNumber(8)
+; CapsLock & 9::switchDesktopByNumber(9)
+; 
+; CapsLock & Numpad1::switchDesktopByNumber(1)
+; CapsLock & Numpad2::switchDesktopByNumber(2)
+; CapsLock & Numpad3::switchDesktopByNumber(3)
+; CapsLock & Numpad4::switchDesktopByNumber(4)
+; CapsLock & Numpad5::switchDesktopByNumber(5)
+; CapsLock & Numpad6::switchDesktopByNumber(6)
+; CapsLock & Numpad7::switchDesktopByNumber(7)
+; CapsLock & Numpad8::switchDesktopByNumber(8)
+; CapsLock & Numpad9::switchDesktopByNumber(9)
+; 
+; CapsLock & n::switchDesktopToRight()
+; CapsLock & p::switchDesktopToLeft()
+; CapsLock & s::switchDesktopToRight()
+; CapsLock & a::switchDesktopToLeft()
+; CapsLock & tab::switchDesktopToLastOpened()
+; 
+; CapsLock & c::createVirtualDesktop()
+; CapsLock & d::deleteVirtualDesktop()
+; 
+; CapsLock & q::MoveCurrentWindowToDesktop(1)
+; CapsLock & w::MoveCurrentWindowToDesktop(2)
+; CapsLock & e::MoveCurrentWindowToDesktop(3)
+; CapsLock & r::MoveCurrentWindowToDesktop(4)
+; CapsLock & t::MoveCurrentWindowToDesktop(5)
+; CapsLock & y::MoveCurrentWindowToDesktop(6)
+; CapsLock & u::MoveCurrentWindowToDesktop(7)
+; CapsLock & i::MoveCurrentWindowToDesktop(8)
+; CapsLock & o::MoveCurrentWindowToDesktop(9)
+; 
+; CapsLock & Right::MoveCurrentWindowToRightDesktop()
+; CapsLock & Left::MoveCurrentWindowToLeftDesktop()
 
 ; === INSTRUCTIONS ===
 ; Below is the alternate key configuration. Delete symbol ; in the beginning of the line to enable.
 ; Note, that  ^!1  means "Ctrl + Alt + 1" and  ^#1  means "Ctrl + Win + 1"
 ; === END OF INSTRUCTIONS ===
 
-; ^!1::switchDesktopByNumber(1)
-; ^!2::switchDesktopByNumber(2)
-; ^!3::switchDesktopByNumber(3)
-; ^!4::switchDesktopByNumber(4)
-; ^!5::switchDesktopByNumber(5)
-; ^!6::switchDesktopByNumber(6)
-; ^!7::switchDesktopByNumber(7)
-; ^!8::switchDesktopByNumber(8)
-; ^!9::switchDesktopByNumber(9)
+
+;^!7::switchDesktopByNumber(7)
+;^!8::switchDesktopByNumber(8)
+;^!9::switchDesktopByNumber(9)
 
 ; ^!Numpad1::switchDesktopByNumber(1)
 ; ^!Numpad2::switchDesktopByNumber(2)
@@ -88,24 +126,17 @@ CapsLock & Left::MoveCurrentWindowToLeftDesktop()
 ; ^!Numpad8::switchDesktopByNumber(8)
 ; ^!Numpad9::switchDesktopByNumber(9)
 
-; ^!n::switchDesktopToRight()
-; ^!p::switchDesktopToLeft()
-; ^!s::switchDesktopToRight()
-; ^!a::switchDesktopToLeft()
-; ^!tab::switchDesktopToLastOpened()
+;^!n::switchDesktopToRight()
+;^!p::switchDesktopToLeft()
+
 
 ; ^!c::createVirtualDesktop()
 ; ^!d::deleteVirtualDesktop()
 
-; ^#1::MoveCurrentWindowToDesktop(1)
-; ^#2::MoveCurrentWindowToDesktop(2)
-; ^#3::MoveCurrentWindowToDesktop(3)
-; ^#4::MoveCurrentWindowToDesktop(4)
-; ^#5::MoveCurrentWindowToDesktop(5)
-; ^#6::MoveCurrentWindowToDesktop(6)
-; ^#7::MoveCurrentWindowToDesktop(7)
-; ^#8::MoveCurrentWindowToDesktop(8)
-; ^#9::MoveCurrentWindowToDesktop(9)
+
+;^!+7::MoveCurrentWindowToDesktop(7)
+;^!+8::MoveCurrentWindowToDesktop(8)
+;^!+9::MoveCurrentWindowToDesktop(9)
 
 ; ^#Numpad1::MoveCurrentWindowToDesktop(1)
 ; ^#Numpad2::MoveCurrentWindowToDesktop(2)
@@ -117,8 +148,6 @@ CapsLock & Left::MoveCurrentWindowToLeftDesktop()
 ; ^#Numpad8::MoveCurrentWindowToDesktop(8)
 ; ^#Numpad9::MoveCurrentWindowToDesktop(9)
 
-; ^#Right::MoveCurrentWindowToRightDesktop()
-; ^#Left::MoveCurrentWindowToLeftDesktop()
 
 
 
